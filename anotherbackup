@@ -1,0 +1,21 @@
+$report = @()
+foreach ($nsg in Get-AzureRmNetworkSecurityGroup){
+foreach($rule in $nsg.SecurityRules){
+$info = "" | select-object nsg, rule, description, protocol, SourcePortRange, DestinationPortRange, SourceApplicationSecurityGroups, DestinationApplicationSecurityGroups, SourceAddressPrefix, DestinationAddressPrefix, Access, Priority, Direction 
+$info.nsg = $nsg.Name 
+$info.rule = $rule.name 
+$info.Description = $rule.Description 
+$info.Protocol = $rule.Protocol 
+$info.SourcePortRange = $rule.SourcePortRange[0] 
+$info.DestinationPortRange = $rule.DestinationPortRange[0] 
+$info.SourceAddressPrefix = $rule.SourceAddressPrefix[0] 
+$info.DestinationAddressPrefix = $rule.DestinationAddressPrefix[0] 
+$info.SourceApplicationSecurityGroups = $rule.SourceApplicationSecurityGroups[0] 
+$info.DestinationApplicationSecurityGroups = $rule.DestinationApplicationSecurityGroups[0] 
+$info.Access = $rule.Access 
+$info.Priority = $rule.Priority 
+$info.Direction = $rule.Direction 
+$report += $info
+}
+}
+$report
