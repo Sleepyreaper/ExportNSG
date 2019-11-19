@@ -1,0 +1,1 @@
+Get-AzureRmNetworkSecurityGroup -Name TestNSG01 -ResourceGroupName POC-VPN | Get-AzureRmNetworkSecurityRuleConfig | Select * | Export-Csv -NoTypeInformation -Path C:\Temp\TestNSG01.csv
