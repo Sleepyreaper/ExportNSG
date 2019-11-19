@@ -1,1 +1,17 @@
-Get-AzureRmNetworkSecurityGroup -Name TestNSG01 -ResourceGroupName POC-VPN | Get-AzureRmNetworkSecurityRuleConfig | Select * | Export-Csv -NoTypeInformation -Path C:\Temp\TestNSG01.csv
+OLD Get-AzureRmNetworkSecurityGroup -Name TestNSG01 -ResourceGroupName POC-VPN | Get-AzureRmNetworkSecurityRuleConfig | Select * | Export-Csv -NoTypeInformation -Path C:\Temp\TestNSG01.csv
+
+I need to back it up
+$TemplateNSGRules =  Get-AzureRmNetworkSecurityGroup -Name 'Windows-NSG' -ResourceGroupName 'POC-VPN' | Get-AzureRmNetworkSecurityRuleConfig
+
+$NSG = New-AzureRmNetworkSecurityGroup -ResourceGroupName 'POC-VPN' -Location 'East US 2' -Name 'Copy-of-Windows-NSG'
+
+foreach ($rule in $TemplateNSGRules) {
+    $NSG | Add-AzureRmNetworkSecurityRuleConfig -Name $rule.Name -Direction $rule.Direction -Priority $rule.Priority -Access $rule.Access -SourceAddressPrefix $rule.SourceAddressPrefix -SourcePortRange $rule.SourcePortRange -DestinationAddressPrefix $rule.DestinationAddressPrefix -DestinationPortRange $rule.DestinationPortRange -Protocol $rule.Protocol # -Description $rule.Description
+    $NSG | Set-AzureRmNetworkSecurityGroup
+}
+
+I need to restore this:
+
+$TemplateNSGRules = Import-CSV -Path C:\Temp\TestNSG01.csv 
+
+
